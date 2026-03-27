@@ -23,7 +23,7 @@ jobs:
         run: |
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
-            archlinux:base-devel \
+            ghcr.io/archlinux/archlinux:base-devel \
             bash /workspace/build.sh /workspace
 
       - name: Verify release artifacts
