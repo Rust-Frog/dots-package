@@ -1,0 +1,79 @@
+# Maintainer: Rust-Frog <b235.dev@gmail.com>
+pkgname=caelestia-shell
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Caelestia desktop shell - QML shell with C++ plugin for Quickshell"
+arch=('x86_64')
+url="https://github.com/Rust-Frog/CShell"
+license=('GPL-3.0-only')
+depends=(
+    # Runtime from your custom repo
+    'quickshell'
+
+    # Qt6
+    'qt6-base'
+    'qt6-declarative'
+
+    # Plugin dependencies
+    'libqalculate'
+    'pipewire'
+    'aubio'
+    'libcava'
+    'fftw'
+
+    # Runtime tools used by shell
+    'fish'
+    'brightnessctl'
+    'ddcutil'
+    'networkmanager'
+    'lm_sensors'
+    'swappy'
+    'wl-clipboard'
+    'hyprland'
+    'xdg-utils'
+)
+makedepends=(
+    'cmake'
+    'ninja'
+    'git'
+    'pkg-config'
+    'qt6-tools'
+    'clang'
+)
+optdepends=(
+    'caelestia-cli: CLI tool for scheme, wallpaper, shell control'
+    'material-symbols-fonts: Material icons'
+    'ttf-rubik: Rubik font'
+    'ttf-nerd-fonts-symbols: Nerd font symbols'
+)
+source=("git+https://github.com/Rust-Frog/CShell.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd CShell
+    git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "1.0.0"
+}
+
+build() {
+    local _gitrev
+    _gitrev=$(cd CShell && git rev-parse HEAD)
+
+    cmake -B build -S CShell -G Ninja \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_COMPILER=clang++ \
+        -DVERSION="$pkgver" \
+        -DGIT_REVISION="$_gitrev" \
+        -DDISTRIBUTOR="Rust-Frog" \
+        -DINSTALL_QMLDIR=/usr/lib/qt6/qml \
+        -DINSTALL_QSCONFDIR=/etc/xdg/quickshell/caelestia \
+        -DINSTALL_LIBDIR=/usr/lib/caelestia
+
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+
+    # Ensure scripts are executable
+    chmod 755 "$pkgdir/etc/xdg/quickshell/caelestia/assets/"*.sh 2>/dev/null || true
+}

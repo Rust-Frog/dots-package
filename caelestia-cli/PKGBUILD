@@ -1,0 +1,46 @@
+# Maintainer: Rust-Frog <b235.dev@gmail.com>
+pkgname=caelestia-cli
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="CLI tool for Caelestia dotfiles - wallpaper, color scheme, shell control"
+arch=('any')
+url="https://github.com/Rust-Frog/cli"
+license=('GPL-3.0-only')
+depends=(
+    'python>=3.13'
+    'python-pillow'
+    'python-materialyoucolor'
+)
+makedepends=(
+    'python-build'
+    'python-installer'
+    'python-hatchling'
+    'python-hatch-vcs'
+    'git'
+)
+source=("git+https://github.com/Rust-Frog/cli.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd cli
+    git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "1.0.0"
+}
+
+build() {
+    cd cli
+    python -m build --wheel --no-isolation
+}
+
+package() {
+    cd cli
+    python -m installer --destdir="$pkgdir" dist/*.whl
+
+    # Install fish completions
+    install -Dm644 completions/caelestia.fish \
+        "$pkgdir/usr/share/fish/vendor_completions.d/caelestia.fish"
+
+    # Install bin script if not included in wheel
+    if [[ ! -f "$pkgdir/usr/bin/caelestia" ]]; then
+        install -Dm755 bin/caelestia "$pkgdir/usr/bin/caelestia"
+    fi
+}
