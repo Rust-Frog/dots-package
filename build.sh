@@ -161,6 +161,50 @@ cd "$SHELL_INSTALL"
 tar czf "$WORKSPACE/release/caelestia-shell-${SHELL_VERSION}-local.tar.gz" .local/
 
 # ============================================
+# Download and package emoji font
+# ============================================
+echo "=== Packaging Noto Color Emoji font ==="
+FONT_INSTALL="$BUILD_DIR/font-install"
+mkdir -p "$FONT_INSTALL/.local/share/fonts"
+mkdir -p "$FONT_INSTALL/.config/fontconfig"
+
+# Download Noto Color Emoji
+cd /tmp
+wget -q --show-progress "https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf" -O NotoColorEmoji.ttf
+cp NotoColorEmoji.ttf "$FONT_INSTALL/.local/share/fonts/"
+
+# Create fontconfig to prefer emoji font
+cat > "$FONT_INSTALL/.config/fontconfig/fonts.conf" << 'FONTCONFIG'
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <!-- Add emoji font -->
+  <alias>
+    <family>sans-serif</family>
+    <prefer>
+      <family>Noto Color Emoji</family>
+    </prefer>
+  </alias>
+  <alias>
+    <family>serif</family>
+    <prefer>
+      <family>Noto Color Emoji</family>
+    </prefer>
+  </alias>
+  <alias>
+    <family>monospace</family>
+    <prefer>
+      <family>Noto Color Emoji</family>
+    </prefer>
+  </alias>
+</fontconfig>
+FONTCONFIG
+
+# Create tarball
+cd "$FONT_INSTALL"
+tar czf "$WORKSPACE/release/caelestia-fonts-${VERSION}-local.tar.gz" .local/ .config/
+
+# ============================================
 # Create checksums
 # ============================================
 echo "=== Creating checksums ==="
