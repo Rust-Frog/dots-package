@@ -204,5 +204,3 @@ set -gx QML_IMPORT_PATH "$HOME/.local/lib/qt6/qml" $QML_IMPORT_PATH
 GPL-3.0-only (matching upstream Caelestia)
 
 ---
-
-**Note:** This is a self-hosted fork of [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) with custom patches and local installation support.
