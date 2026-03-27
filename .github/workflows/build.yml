@@ -21,7 +21,7 @@ jobs:
 
       - name: Build local installation tarballs
         run: |
-          docker run --rm --pull always \
+          docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             archlinux:base-devel \
             bash /workspace/build.sh /workspace
