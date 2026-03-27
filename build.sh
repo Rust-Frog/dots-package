@@ -84,27 +84,27 @@ python -m build --wheel --no-isolation
 python -m installer --destdir="$CLI_INSTALL" dist/*.whl
 
 # Reorganize to desired structure for ~/.local
-mkdir -p "$CLI_INSTALL/local/bin"
-mkdir -p "$CLI_INSTALL/local/share/caelestia"
-mkdir -p "$CLI_INSTALL/local/share/fish/vendor_completions.d"
+mkdir -p "$CLI_INSTALL/.local/bin"
+mkdir -p "$CLI_INSTALL/.local/share/caelestia"
+mkdir -p "$CLI_INSTALL/.local/share/fish/vendor_completions.d"
 
 # Find where pip installed things (usually usr/lib/python3.*/site-packages/caelestia)
 PYTHON_SITE=$(find "$CLI_INSTALL" -type d -path "*/site-packages/caelestia" | head -1)
 if [ -n "$PYTHON_SITE" ]; then
     # Copy Python package to share/caelestia
-    cp -r "$PYTHON_SITE"/* "$CLI_INSTALL/local/share/caelestia/"
+    cp -r "$PYTHON_SITE"/* "$CLI_INSTALL/.local/share/caelestia/"
     
     # Copy bin script if it exists
     if [ -f "$CLI_INSTALL/usr/bin/caelestia" ]; then
-        cp "$CLI_INSTALL/usr/bin/caelestia" "$CLI_INSTALL/local/bin/"
+        cp "$CLI_INSTALL/usr/bin/caelestia" "$CLI_INSTALL/.local/bin/"
     fi
 fi
 
 # Copy completions
-cp completions/caelestia.fish "$CLI_INSTALL/local/share/fish/vendor_completions.d/"
+cp completions/caelestia.fish "$CLI_INSTALL/.local/share/fish/vendor_completions.d/"
 
 # Create wrapper script if needed
-cat > "$CLI_INSTALL/local/bin/caelestia" << 'WRAPPER'
+cat > "$CLI_INSTALL/.local/bin/caelestia" << 'WRAPPER'
 #!/usr/bin/env python3
 import sys
 import os
@@ -118,11 +118,11 @@ if __name__ == '__main__':
     main()
 WRAPPER
 
-chmod +x "$CLI_INSTALL/local/bin/caelestia"
+chmod +x "$CLI_INSTALL/.local/bin/caelestia"
 
 # Create tarball
 cd "$CLI_INSTALL"
-tar czf "$WORKSPACE/release/caelestia-cli-${CLI_VERSION}-local.tar.gz" local/
+tar czf "$WORKSPACE/release/caelestia-cli-${CLI_VERSION}-local.tar.gz" .local/
 
 # ============================================
 # Build caelestia-shell
@@ -140,7 +140,7 @@ GIT_REV=$(git rev-parse HEAD)
 cmake -B build -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CXX_COMPILER=clang++ \
-    -DCMAKE_INSTALL_PREFIX="$SHELL_INSTALL/local" \
+    -DCMAKE_INSTALL_PREFIX="$SHELL_INSTALL/.local" \
     -DVERSION="$SHELL_VERSION" \
     -DGIT_REVISION="$GIT_REV" \
     -DDISTRIBUTOR="Rust-Frog-Local" \
@@ -154,11 +154,11 @@ cmake --build build
 cmake --install build
 
 # Fix permissions
-chmod 755 "$SHELL_INSTALL/local/etc/xdg/quickshell/caelestia/assets/"*.sh 2>/dev/null || true
+chmod 755 "$SHELL_INSTALL/.local/etc/xdg/quickshell/caelestia/assets/"*.sh 2>/dev/null || true
 
 # Create tarball
 cd "$SHELL_INSTALL"
-tar czf "$WORKSPACE/release/caelestia-shell-${SHELL_VERSION}-local.tar.gz" local/
+tar czf "$WORKSPACE/release/caelestia-shell-${SHELL_VERSION}-local.tar.gz" .local/
 
 # ============================================
 # Create checksums
