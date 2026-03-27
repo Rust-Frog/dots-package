@@ -109,8 +109,8 @@ cat > "$CLI_INSTALL/.local/bin/caelestia" << 'WRAPPER'
 import sys
 import os
 
-# Add ~/.local/share/caelestia to Python path
-sys.path.insert(0, os.path.expanduser('~/.local/share/caelestia'))
+# Add ~/.local/share to Python path so 'caelestia' module is found
+sys.path.insert(0, os.path.expanduser('~/.local/share'))
 
 from caelestia import main
 
