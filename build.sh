@@ -42,9 +42,20 @@ pacman -S --noconfirm --needed \
     libqalculate \
     pipewire \
     aubio \
-    libcava \
     fftw \
     quickshell
+
+# Build libcava from AUR (not in official repos)
+echo "=== Building libcava from AUR ==="
+useradd -m builder || true
+echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+cd /tmp
+sudo -u builder bash << 'EOBUILD'
+git clone https://aur.archlinux.org/libcava.git
+cd libcava
+makepkg -si --noconfirm
+EOBUILD
+cd "$WORKSPACE"
 
 VERSION="${VERSION:-1.0.0}"
 BUILD_DIR="/build"
