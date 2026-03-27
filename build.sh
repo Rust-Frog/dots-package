@@ -163,22 +163,37 @@ tar czf "$WORKSPACE/release/caelestia-shell-${SHELL_VERSION}-local.tar.gz" .loca
 # ============================================
 # Download and package emoji font
 # ============================================
-echo "=== Packaging Noto Color Emoji font ==="
+echo "=== Packaging fonts (Emoji + Material Symbols + Rubik) ==="
 FONT_INSTALL="$BUILD_DIR/font-install"
 mkdir -p "$FONT_INSTALL/.local/share/fonts"
 mkdir -p "$FONT_INSTALL/.config/fontconfig"
 
-# Download Noto Color Emoji
 cd /tmp
+
+# Download Noto Color Emoji
+echo "Downloading Noto Color Emoji..."
 curl -L -o NotoColorEmoji.ttf "https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf"
 cp NotoColorEmoji.ttf "$FONT_INSTALL/.local/share/fonts/"
 
-# Create fontconfig to prefer emoji font
+# Download Material Symbols (Google Fonts variable version)
+echo "Downloading Material Symbols..."
+curl -L -o MaterialSymbols.zip "https://github.com/google/material-symbols/archive/refs/heads/main.zip"
+unzip -o -j MaterialSymbols.zip "material-symbols-main/fonts/variable/MaterialSymbols*.ttf" -d "$FONT_INSTALL/.local/share/fonts/" 2>/dev/null || true
+
+# Download Rubik font (static version)
+echo "Downloading Rubik font..."
+curl -L -o Rubik.zip "https://github.com/googlefonts/rubik/archive/refs/heads/main.zip"
+unzip -o -j Rubik.zip "rubik-main/fonts/ttf/Rubik-*.ttf" -d "$FONT_INSTALL/.local/share/fonts/" 2>/dev/null || true
+
+# Clean up temp files
+rm -f NotoColorEmoji.ttf MaterialSymbols.zip Rubik.zip
+
+# Create fontconfig to prefer emoji and fallback fonts
 cat > "$FONT_INSTALL/.config/fontconfig/fonts.conf" << 'FONTCONFIG'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
-  <!-- Add emoji font -->
+  <!-- Emoji font -->
   <alias>
     <family>sans-serif</family>
     <prefer>
@@ -196,6 +211,24 @@ cat > "$FONT_INSTALL/.config/fontconfig/fonts.conf" << 'FONTCONFIG'
     <prefer>
       <family>Noto Color Emoji</family>
     </prefer>
+  </alias>
+
+  <!-- Material Symbols for icons -->
+  <alias>
+    <family>Material Symbols</family>
+    <family>Material Symbols Rounded</family>
+    <family>Material Symbols Sharp</family>
+    <default>
+      <family>Material Symbols Rounded</family>
+    </default>
+  </alias>
+
+  <!-- Rubik for text -->
+  <alias>
+    <family>Rubik</family>
+    <default>
+      <family>Rubik</family>
+    </default>
   </alias>
 </fontconfig>
 FONTCONFIG
