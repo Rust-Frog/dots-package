@@ -36,6 +36,12 @@ jobs:
           echo "✅ All release files present"
           cat release/SHA256SUMS
 
+      - name: Fix release directory permissions
+        run: |
+          sudo chown -R $USER:$USER release
+          sudo chmod -R u+w release
+          ls -lh release/
+
       - name: Create latest symlinks
         run: |
           cd release
