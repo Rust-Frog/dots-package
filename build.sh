@@ -43,7 +43,8 @@ pacman -S --noconfirm --needed \
     pipewire \
     aubio \
     fftw \
-    quickshell
+    quickshell \
+    ffmpeg
 
 # Build libcava from AUR (not in official repos)
 echo "=== Building libcava from AUR ==="
