@@ -237,6 +237,10 @@ FONTCONFIG
 cd "$FONT_INSTALL"
 tar czf "$WORKSPACE/release/caelestia-fonts-${VERSION}-local.tar.gz" .local/ .config/
 
+# Create latest symlink for easy access
+cd "$WORKSPACE/release"
+ln -sf "caelestia-fonts-${VERSION}-local.tar.gz" caelestia-fonts-latest.tar.gz
+
 # ============================================
 # Create checksums
 # ============================================
