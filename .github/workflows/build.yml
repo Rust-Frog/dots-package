@@ -39,8 +39,21 @@ jobs:
       - name: Create latest symlinks
         run: |
           cd release
-          ln -sf caelestia-cli-*-local.tar.gz caelestia-cli-latest.tar.gz
-          ln -sf caelestia-shell-*-local.tar.gz caelestia-shell-latest.tar.gz
+          # Find the actual files and create symlinks
+          CLI_FILE=$(ls caelestia-cli-*-local.tar.gz 2>/dev/null | head -1)
+          SHELL_FILE=$(ls caelestia-shell-*-local.tar.gz 2>/dev/null | head -1)
+          
+          if [ -n "$CLI_FILE" ]; then
+            ln -sf "$CLI_FILE" caelestia-cli-latest.tar.gz
+            echo "Created symlink: caelestia-cli-latest.tar.gz -> $CLI_FILE"
+          fi
+          
+          if [ -n "$SHELL_FILE" ]; then
+            ln -sf "$SHELL_FILE" caelestia-shell-latest.tar.gz
+            echo "Created symlink: caelestia-shell-latest.tar.gz -> $SHELL_FILE"
+          fi
+          
+          ls -lh
 
       - name: Create index page
         run: |
