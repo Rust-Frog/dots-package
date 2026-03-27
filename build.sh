@@ -170,7 +170,7 @@ mkdir -p "$FONT_INSTALL/.config/fontconfig"
 
 # Download Noto Color Emoji
 cd /tmp
-wget -q --show-progress "https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf" -O NotoColorEmoji.ttf
+curl -L --show-progress -o NotoColorEmoji.ttf "https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf"
 cp NotoColorEmoji.ttf "$FONT_INSTALL/.local/share/fonts/"
 
 # Create fontconfig to prefer emoji font
