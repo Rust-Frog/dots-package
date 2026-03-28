@@ -131,6 +131,8 @@ import os
 
 # Add ~/.local/share to Python path so 'caelestia' module is found
 sys.path.insert(0, os.path.expanduser('~/.local/share'))
+# Add ~/.local/share/caelestia for vendored dependencies (materialyoucolor, PIL)
+sys.path.insert(0, os.path.expanduser('~/.local/share/caelestia'))
 
 from caelestia import main
 
