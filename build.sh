@@ -90,6 +90,11 @@ CLI_VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo 
 # Build Python wheel
 python -m build --wheel --no-isolation
 
+# Install Python dependencies to a temporary site-packages
+DEPS_INSTALL="$BUILD_DIR/python-deps"
+mkdir -p "$DEPS_INSTALL"
+python -m pip install --target="$DEPS_INSTALL" pillow materialyoucolor
+
 # Install to temporary location
 python -m installer --destdir="$CLI_INSTALL" dist/*.whl
 
@@ -108,6 +113,11 @@ if [ -n "$PYTHON_SITE" ]; then
     if [ -f "$CLI_INSTALL/usr/bin/caelestia" ]; then
         cp "$CLI_INSTALL/usr/bin/caelestia" "$CLI_INSTALL/.local/bin/"
     fi
+fi
+
+# Copy Python dependencies to share/caelestia
+if [ -d "$DEPS_INSTALL" ]; then
+    cp -r "$DEPS_INSTALL"/* "$CLI_INSTALL/.local/share/caelestia/"
 fi
 
 # Copy completions
