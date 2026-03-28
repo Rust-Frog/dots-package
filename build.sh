@@ -56,15 +56,6 @@ git clone https://aur.archlinux.org/libcava.git
 cd libcava
 makepkg -si --noconfirm
 EOBUILD
-
-# Build mpvpaper from AUR (for video wallpaper support)
-echo "=== Building mpvpaper from AUR ==="
-cd /tmp
-sudo -u builder bash << 'EOBUILD'
-git clone https://aur.archlinux.org/mpvpaper.git
-cd mpvpaper
-makepkg -si --noconfirm
-EOBUILD
 cd "$WORKSPACE"
 
 VERSION="${VERSION:-1.0.0}"
