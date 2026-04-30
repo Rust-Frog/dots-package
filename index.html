@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caelestia Local Packages</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: monospace; max-width: 800px; margin: 50px auto; padding: 20px; }
+        h1 { color: #5555ff; }
+        pre { background: #f5f5f5; padding: 15px; border-radius: 5px; }
+        code { background: #e0e0e0; padding: 2px 6px; border-radius: 3px; }
+        a { color: #5555ff; }
+    </style>
+</head>
+<body>
+    <h1>Caelestia Local Installation Packages</h1>
+    <p>Pre-built packages for local installation to <code>~/.local</code> by Rust-Frog</p>
+    
+    <h2>Usage</h2>
+    <p>Install via the dotfiles installer:</p>
+    <pre>git clone https://github.com/Rust-Frog/dots.git
+cd dots
+./install.fish</pre>
+    
+    <h2>Manual Installation</h2>
+    <pre># Download and extract to ~/.local
+cd ~/.local
+curl -L https://rust-frog.github.io/dots-package/caelestia-cli-latest.tar.gz | tar xz
+curl -L https://rust-frog.github.io/dots-package/caelestia-shell-latest.tar.gz | tar xz
+
+# Add ~/.local/bin to PATH if not already
+export PATH="$HOME/.local/bin:$PATH"</pre>
+    
+    <h2>Packages</h2>
+    <ul>
+        <li><strong>caelestia-cli</strong> - CLI tool for wallpaper, color schemes, shell control</li>
+        <li><strong>caelestia-shell</strong> - QML desktop shell with C++ plugin</li>
+    </ul>
+    
+    <h2>Installation Locations</h2>
+    <ul>
+        <li><code>~/.local/bin/caelestia</code> - CLI binary</li>
+        <li><code>~/.local/lib/qt6/qml/Caelestia/</code> - QML plugin</li>
+        <li><code>~/.local/share/quickshell/caelestia/</code> - Shell QML files</li>
+        <li><code>~/.local/lib/caelestia/</code> - Shell extras</li>
+    </ul>
+    
+    <h2>Links</h2>
+    <ul>
+        <li><a href="https://github.com/Rust-Frog/dots">Dotfiles</a></li>
+        <li><a href="https://github.com/Rust-Frog/cli">CLI Source</a></li>
+        <li><a href="https://github.com/Rust-Frog/CShell">Shell Source</a></li>
+        <li><a href="SHA256SUMS">Checksums</a></li>
+    </ul>
+    
+    <h2>Build Info</h2>
+    <p>Built: $(date -u)</p>
+    <p>Auto-builds daily at 3 AM UTC</p>
+</body>
+</html>
